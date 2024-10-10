@@ -1,2 +1,4 @@
+#ignore dataset file
 Arabic Poem Comprehensive Dataset (APCD).csv
+# Ignore .env file
 .env

@@ -2,3 +2,4 @@
 Arabic Poem Comprehensive Dataset (APCD).csv
 # Ignore .env file
 .env
+poem_embeddings.npy

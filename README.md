@@ -4,28 +4,33 @@
 Project Jazil is an innovative Arabic poetry game combining classical Arabic poetry with modern AI technology. Through a powerful backend API and native iOS application (Jazel), users can engage in interactive verse exchanges with an AI system, creating a unique educational and entertaining experience.
 
 ### App Launch & Brand
-![Jazil Logo and Launch Screen](images/jazil_launch.png)
-![Jazil Logo and Launch Screen](images/logo.png)
-
-*Jazil's distinctive logo and app launch experience*
+<div align="center">
+  <img src="images/jazil_launch.png" width="250" alt="Jazil Logo and Launch Screen"/>
+  <img src="images/logo.png" width="250" alt="Jazil Logo"/>
+  <p><em>Jazil's distinctive logo and app launch experience</em></p>
+</div>
 
 ### Main Interface
-![Main Menu](images/main_menu.png)
-*Main menu featuring Play, Instructions, and Leaderboard options*
+<div align="center">
+  <img src="images/main_menu.png" width="250" alt="Main Menu"/>
+  <p><em>Main menu featuring Play, Instructions, and Leaderboard options</em></p>
+</div>
 
 ## Key Features
 
-### Game Modes
-![Difficulty Selection](images/difficulty_levels.png)
-*Choose between Easy (سهل) and Hard (صعب) difficulty levels*
-
-### Leaderboard System
-![Poetry Leaderboard](images/leaderboard.png)
-*بواقع الشعر - Competitive poetry leaderboard showing top performers*
+### Game Modes & Leaderboard
+<div align="center">
+  <img src="images/difficulty_levels.png" width="250" alt="Difficulty Selection"/>
+  <img src="images/leaderboard.png" width="250" alt="Leaderboard"/>
+  <p><em>Left: Choose between Easy (سهل) and Hard (صعب) difficulty levels<br/>
+  Right: بواقع الشعر - Competitive poetry leaderboard</em></p>
+</div>
 
 ### Interactive Gameplay
-![Game Interface](images/game_chat.png)
-*Real-time poetry exchange interface with AI*
+<div align="center">
+  <img src="images/game_chat.png" width="250" alt="Game Interface"/>
+  <p><em>Real-time poetry exchange interface with AI</em></p>
+</div>
 
 ## System Components
 
@@ -36,8 +41,10 @@ The game offers:
 - User rankings and scores
 - Educational insights into classical Arabic poetry
 
-![Game Instructions](images/instructions.png)
-*Game instructions and Arabic poetry challenge rules*
+<div align="center">
+  <img src="images/instructions.png" width="250" alt="Game Instructions"/>
+  <p><em>Game instructions and Arabic poetry challenge rules</em></p>
+</div>
 
 ## Technical Capabilities
 - FastAPI-powered backend with IBM Watson AI integration
@@ -52,19 +59,43 @@ The game offers:
 - Arabic language support
 - Internet connection required
 
-[Rest of the technical documentation remains the same...]
+## Technical Documentation
 
-Would you like me to:
-1. Add more detailed descriptions for each screenshot?
-2. Reorganize the layout of the images?
-3. Add more technical details about specific features shown in the screenshots?
-4. Include user interaction flows between the screens?
+### API Features
 
-The screenshots show:
-1. App launch and logo
-2. Main menu interface
-3. Leaderboard system
-4. Game chat interface
-5. Difficulty selection
-6. Proper Arabic localization
-7. Clean, user-friendly design
+```http
+POST /games                        # Create game
+POST /games/{session_id}/verses    # Submit verse
+GET /games/{session_id}/metrics    # Get metrics
+GET /analytics/report/{session_id}  # Generate report
+```
+
+### Example Game Flow
+```json
+// Create Game
+POST /games
+{
+    "difficulty": "easy"
+}
+
+// Submit Verse
+POST /games/{session_id}/verses
+{
+    "verse": "كُن اِبنَ مَن شِئتَ واِكتَسِب أَدَباً"
+}
+```
+
+## Setup Requirements
+
+### Backend
+- Python 3.8+
+- FastAPI
+- IBM Watson API credentials
+- Required Python packages (see requirements.txt)
+
+### iOS Application
+- Xcode 15.0+
+- iOS 15.0+ deployment target
+- macOS Sonoma 14.0+ for development
+
+For technical support or questions, please create an issue in the GitHub repository.

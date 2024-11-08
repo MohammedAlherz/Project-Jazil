@@ -225,11 +225,4 @@ For technical issues or questions:
 - Backend: Create an issue in the GitHub repository
 - iOS: Check Jazel documentation or create an issue
 
-## License
-This project is licensed under the [MIT License](LICENSE)
 
-## Contact
-For support or questions, please contact [Your Contact Information]
-
----
-© 2024 Project Jazil. All Rights Reserved.

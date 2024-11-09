@@ -23,7 +23,7 @@ Project Jazil is an innovative Arabic poetry game combining classical Arabic poe
   <img src="images/difficulty_levels.png" width="250" alt="Difficulty Selection"/>
   <img src="images/leaderboard.png" width="250" alt="Leaderboard"/>
   <p><em>Left: Choose between Easy (سهل) and Hard (صعب) difficulty levels<br/>
-  Right: بواقع الشعر - Competitive poetry leaderboard</em></p>
+  Right: نوابغ الشعر - Competitive poetry leaderboard</em></p>
 </div>
 
 ### Interactive Gameplay

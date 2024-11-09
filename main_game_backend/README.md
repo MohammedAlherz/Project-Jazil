@@ -11,6 +11,7 @@
 7. [Analytics and Reporting](#7-analytics-and-reporting)
 8. [Troubleshooting](#8-troubleshooting)
 9. [Security and Performance](#9-security-and-performance)
+10. [Cloud Deployment](#10-cloud-deployment)
 
 ## 1. Introduction
 
@@ -48,52 +49,44 @@ Jazil is an AI-powered Arabic poetry game that enables interactive verse exchang
 - Python 3.8 or higher
 - pip package manager
 - Git (optional)
-- Node.js (for development tools)
-- Docker (optional, for containerization)
-
+- Docker (for containerization)
 ### 2.3 Dependencies
 ```plaintext
-fastapi>=0.68.0
-uvicorn>=0.15.0
-pydantic>=1.8.2
-requests>=2.26.0
-pandas>=1.3.0
-numpy>=1.21.0
-python-dotenv>=0.19.0
-datasets>=2.0.0
-sentence-transformers>=2.2.0
-langchain>=0.0.200
-langchain_community>=0.0.10
-scikit-learn>=0.24.2
-transformers>=4.21.0
-sentencepiece>=0.1.96
-camel-tools>=1.0.0
-apscheduler>=3.9.1
-torch>=1.9.0
-h5py>=3.6.0
-tqdm>=4.62.2
-psutil>=5.8.0
-pyarrow>=6.0.0
-uvloop>=0.16.0
-matplotlib>=3.4.3
-seaborn>=0.11.2
-xlsxwriter>=3.0.2
+fastapi
+uvicorn
+pydantic
+requests
+pandas
+numpy
+python-dotenv
+datasets
+sentence-transformers
+langchain
+langchain_community
+scikit-learn
+transformers
+sentencepiece
+camel-tools
+apscheduler
+torch
+h5py
+tqdm
+psutil
+pyarrow 
+uvloop  
 ```
 
 ## 3. Installation and Setup
 
-### 3.1 Environment Setup
+### 3.1 Local Environment Setup
 ```bash
-# Create virtual environment (optional but recommended)
+# Create virtual environment
 python -m venv venv
 source venv/bin/activate  # Linux/Mac
 venv\Scripts\activate     # Windows
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Initialize embeddings (first run only)
-python init_embeddings.py
 ```
 
 ### 3.2 Environment Variables
@@ -102,20 +95,45 @@ Create a `.env` file:
 IBM_WATSONX_API_KEY=your_api_key
 IBM_WATSONX_PROJECT_ID=your_project_id
 IBM_WATSONX_URL=your_api_url
-MODEL_ID=sdaia/allam-1-13b-instruct
-EMBEDDING_MODEL=all-MiniLM-L6-v2
-MAX_SESSIONS=1000
-CLEANUP_INTERVAL=900
-DEBUG=False
+GOOGLE_CLOUD_PROJECT=your_project_id
 ```
 
-### 3.3 Running the Server
-```bash
-# Development
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+### 3.3 Deployment Options
 
-# Production
-uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4 --limit-concurrency 50
+#### Local Development
+```bash
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
+```
+
+#### Google Cloud Run Deployment
+
+1. **Dockerfile Configuration**
+```dockerfile
+FROM python:3.9-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+ENV PORT 8080
+
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+```
+
+2. **Build and Deploy**
+```bash
+# Build container
+gcloud builds submit --tag gcr.io/[PROJECT_ID]/jazil-game
+
+# Deploy to Cloud Run
+gcloud run deploy jazil-game \
+  --image gcr.io/[PROJECT_ID]/jazil-game \
+  --platform managed \
+  --region us-central1 \
+  --allow-unauthenticated \
+  --memory 2Gi \
+  --cpu 2
 ```
 
 ## 4. Game Architecture
@@ -149,19 +167,25 @@ uvicorn main:app --host 0.0.0.0 --port 8000 --workers 4 --limit-concurrency 50
 - Parameters: 13 billion
 - Specialization: Arabic poetry and literature
 - Integration: IBM WatsonX platform
+- Configuration:
+  - Max tokens: 200
+  - Decoding: Greedy
+  - Repetition penalty: 1.0
 
 #### Embedding Model
 - Model: all-MiniLM-L6-v2
 - Source: Hugging Face Sentence Transformers
 - Vector size: 384 dimensions
 - Purpose: Semantic similarity computation
-- Performance: Optimized for multilingual content
+- Batch processing: 100 verses
+- Memory optimization: Garbage collection
 
 ### 5.2 Dataset
 - Source: arbml/ashaar (Hugging Face)
 - Content: Classical Arabic poetry collection
-- Storage format: Parquet + HDF5
-- Embeddings: Pre-computed and cached
+- Storage format: 
+  - Embeddings: HDF5 with compression
+  - Verses: Parquet
 - Updates: Manual refresh available
 
 ## 6. API Endpoints
@@ -277,7 +301,7 @@ Prevention: Implement request queuing
 - Monitor memory usage with psutil
 - Cache embeddings using h5py
 - Implement connection pooling
-- Use batch processing where applicable
+- Use batch processing
 - Optimize database queries
 - Implement rate limiting
 
@@ -302,7 +326,52 @@ Prevention: Implement request queuing
 - Error rate monitoring
 - Resource utilization
 
-### 9.3 Maintenance
+## 10. Cloud Run Configuration
+
+### 10.1 Service Configuration
+```yaml
+service: jazil-game
+region: us-central1
+platform: managed
+
+runtime_config:
+  python_version: "3.9"
+  operating_system: "linux"
+
+resources:
+  cpu: 2
+  memory: "2Gi"
+  startup_cpu_boost: true
+
+scaling:
+  min_instances: 0
+  max_instances: 100
+  target_cpu_utilization: 0.65
+  request_timeout: 300s
+  
+concurrency:
+  max_instances: 80
+  target: 50
+
+vpc_connector: "projects/[PROJECT_ID]/locations/[REGION]/connectors/[CONNECTOR]"
+```
+
+### 10.2 Cloud Monitoring
+- Request latency tracking
+- Error rate monitoring
+- Instance count metrics
+- CPU/Memory utilization
+- Cold start frequency
+- Custom metrics dashboard
+
+### 10.3 Cloud Logging
+- Application logs
+- Request tracing
+- Error reporting
+- Deployment history
+- Security audit logs
+
+### 10.4 Maintenance
 - Regular embedding updates
 - Model performance evaluation
 - Database optimization
@@ -310,3 +379,10 @@ Prevention: Implement request queuing
 - Backup procedures
 - Security updates
 - Performance tuning
+
+### 10.5 Disaster Recovery
+- Automatic instance recovery
+- Regional failover
+- Data backup strategy
+- Version control
+- Configuration management

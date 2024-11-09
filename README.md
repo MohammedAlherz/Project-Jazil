@@ -97,5 +97,3 @@ POST /games/{session_id}/verses
 - Xcode 15.0+
 - iOS 15.0+ deployment target
 - macOS Sonoma 14.0+ for development
-
-For technical support or questions, please create an issue in the GitHub repository.
